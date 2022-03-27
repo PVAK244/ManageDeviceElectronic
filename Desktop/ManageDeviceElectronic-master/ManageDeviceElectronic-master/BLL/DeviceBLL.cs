@@ -28,7 +28,7 @@ namespace BLL
             return deviceDAL.DeleteDevice(deviceID);
         }
 
-        public bool TurnOnOffDevice(string deviceId, bool status, UsageHistory usage, bool statusNow) => deviceDAL.TurnOnOffDevice(deviceId, status, usage, statusNow);
+        public bool TurnOnOffDevice(string deviceId, bool status, UsageHistory usage) => deviceDAL.TurnOnOffDevice(deviceId, status, usage);
 
 
         public Device SelectDeviceById(string id) => deviceDAL.SelectDeviceById(id);

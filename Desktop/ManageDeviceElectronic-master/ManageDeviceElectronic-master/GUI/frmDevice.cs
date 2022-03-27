@@ -66,7 +66,6 @@ namespace GUI
                 guna2ImageButton1.Location = new Point(4, 19);
                 guna2ImageButton1.Click += onClickImage;
 
-
                 Guna2CustomRadioButton guna2CustomRadioButton1 = new Guna2CustomRadioButton();
                 guna2CustomRadioButton1.CheckedState.BorderColor = Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
                 guna2CustomRadioButton1.CheckedState.BorderThickness = 0;
@@ -111,11 +110,9 @@ namespace GUI
         private void onClickOnOffDevice(object sender, EventArgs e)
         {
             Guna2CustomRadioButton radioButton = (Guna2CustomRadioButton)sender;
-            grBox.Text = radioButton.Text;
             DateTime now = DateTime.Now;
-            Device device = deviceBLL.SelectDeviceById(radioButton.Name);
-            UsageHistory usageHistory = usageBLL.SelectAllUsageHistory().SingleOrDefault(pro => pro.DeviceID == radioButton.Text && pro.LastTimeOn.Month == now.Month);
-            deviceBLL.TurnOnOffDevice(radioButton.Name, !bool.Parse(radioButton.Text), usageHistory, device.status);
+            UsageHistory usageHistory = usageBLL.SelectAllUsageHistory().SingleOrDefault(pro => pro.DeviceID == radioButton.Name && pro.LastTimeOn.Month == now.Month);
+            deviceBLL.TurnOnOffDevice(radioButton.Name, !bool.Parse(radioButton.Text), usageHistory);
             List<Device> listDevice = deviceBLL.SelectDevicesByRoomName(cboRoom.SelectedValue.ToString());
             ChangeRoom(listDevice);
         }
@@ -130,9 +127,9 @@ namespace GUI
             };
             if (f.ShowDialog() == DialogResult.OK)
             {
-                List<Device> listDevice = deviceBLL.SelectDevicesByRoomName(cboRoom.SelectedValue.ToString());
-                ChangeRoom(listDevice);
             }
+            List<Device> listDevice = deviceBLL.SelectDevicesByRoomName(cboRoom.SelectedValue.ToString());
+            ChangeRoom(listDevice);
         }
     }
 }

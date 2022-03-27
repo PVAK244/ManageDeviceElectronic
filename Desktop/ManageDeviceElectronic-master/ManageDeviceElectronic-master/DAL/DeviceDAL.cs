@@ -111,33 +111,34 @@ namespace DAL
             }
         }
 
-        public bool TurnOnOffDevice(string deviceID, bool status, UsageHistory usage, bool statusNow)
+        public bool TurnOnOffDevice(string deviceID, bool status, UsageHistory usage)
         {
             try
             {
                 OpenConnection();
-                string sql = "";
-                if (status && !statusNow)
+                string sql="";
+                if (status)
                 {
                     if (usage != null)
                     {
-                        sql = $"update Device [status] = {status} where[deviceId] = '{deviceID}'" +
-                            $"update [usageHistory] set [lastTimeOn] = '{DateTime.Now}' where [usageHistoryId] = '{usage.ID}'";
+                        sql = $"update Device set [status]= '{status}' where [deviceId]='{deviceID}'" +
+                        $"update [usageHistory] set [lastTimeOn] = '{DateTime.Now}' where [usageHistoryId] = '{usage.ID}'";
                     }
                     else
                     {
                         usage = new UsageHistory(deviceID, DateTime.Now);
-                        sql = $"update Device set [status]='{status} where [deviceId]='{deviceID}'" +
-                            $"insert into [UsageHistory] values('{usage.ID}', '{usage.DeviceID}', '{usage.LastTimeOn}', 0)";
+                        sql = $"update Device set [status]= '{status}' where [deviceId]='{deviceID}'" +
+                        $"insert into [UsageHistory] values('{usage.ID}', '{usage.DeviceID}', '{usage.LastTimeOn}', 0)";
                     }
                 }
-                else if (!status && statusNow)
+                else
                 {
                     TimeSpan time = DateTime.Now - usage.LastTimeOn;
                     double total = usage.TotalTimeOn + time.TotalHours;
-                    sql = $"update Device set [status]='{status} where [deviceId]='{deviceID}'" +
-                       $"update [usageHistory] set [totalTimeOn] = {total} where [usageHistoryId] = '{usage.ID}'";
+                    sql = $"update Device set [status] = '{status}' where [deviceId]='{deviceID}'" +
+                        $"update [usageHistory] set [totalTimeOn] = {total} where [usageHistoryId] = '{usage.ID}'";
                 }
+
                 SqlCommand command = new SqlCommand(sql, conn);
                 if (command.ExecuteNonQuery() > 0)
                     return true;

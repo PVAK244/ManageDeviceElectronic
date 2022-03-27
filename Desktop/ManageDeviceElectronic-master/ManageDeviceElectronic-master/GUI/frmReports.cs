@@ -37,11 +37,11 @@ namespace GUI
             double totalKWH = 0;
             foreach (Device device in deviceBLL.SelectAllDevice())
             {
-                DateTime now = DateTime.Now;
-                UsageHistory usageHistory = usageBLL.SelectAllUsageHistory().SingleOrDefault(pro => pro.DeviceID == device.DeviceID && pro.LastTimeOn.Month == now.Month);
+                UsageHistory usageHistory = usageBLL.SelectAllUsageHistory().SingleOrDefault(pro => pro.DeviceID == device.DeviceID && pro.LastTimeOn.Month == DateTime.Now.Month);
                 int totalTimeOn = 0;  
                 if (device.status == true)
                 {
+                    DateTime now = DateTime.Now;
                     TimeSpan time = now - usageHistory.LastTimeOn;
                     usageHistory.TotalTimeOn = time.TotalHours;
                     usageBLL.UpdateUsageHistory(usageHistory);
